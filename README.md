@@ -54,25 +54,6 @@ SQL Server
 RabbitMQ
 Executa o ambiente em segundo plano (detached mode)
 
-# ▶️ Script de inicialização com Kubernetes
-deploy-local.sh
-## 📌 Pré-requisitos:
-
-Docker Desktop instalado
-Kubernetes habilitado no Docker Desktop
-Settings → Kubernetes → Enable Kubernetes
-kubectl disponível no PATH
-
-## 📌 O que esse script faz
-
-Builda todas as imagens Docker locais que serão utilizadas pelo Kubernetes
-Aplica os manifestos Kubernetes organizados por responsabilidade:
-Infraestrutura compartilhada (namespace, SQL Server, RabbitMQ, ConfigMaps e Secrets)
-Microserviços individualmente
-Cria um port-forward temporário para o SQL Server, permitindo:
-Conexão externa via DBeaver / SSMS
-Análise e validação do banco de dados
-
 # ☸️ Kubernetes (Docker Desktop)
 ## 📂 Pasta k8s/
 
@@ -92,6 +73,25 @@ Cada pasta contém:
 Deployment
 Service (ClusterIP + NodePort)
 ConfigMaps específicos do microserviço
+
+# ▶️ Script de inicialização com Kubernetes
+deploy-local.sh
+## 📌 Pré-requisitos:
+
+Docker Desktop instalado
+Kubernetes habilitado no Docker Desktop
+Settings → Kubernetes → Enable Kubernetes
+kubectl disponível no PATH
+
+## 📌 O que esse script faz
+
+Builda todas as imagens Docker locais que serão utilizadas pelo Kubernetes
+Aplica os manifestos Kubernetes organizados por responsabilidade:
+Infraestrutura compartilhada (namespace, SQL Server, RabbitMQ, ConfigMaps e Secrets)
+Microserviços individualmente
+Cria um port-forward temporário para o SQL Server, permitindo:
+Conexão externa via DBeaver / SSMS
+Análise e validação do banco de dados
 
 ## 📌 Regras atendidas:
 - Uso obrigatório de Deployments
