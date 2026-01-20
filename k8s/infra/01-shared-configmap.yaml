@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paif-shared-config
+  namespace: paif
+data:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: "false"
+  LANG: "C.UTF-8"
+  LC_ALL: "C.UTF-8"
+
+  DB_HOST: "sqlserver"
+  DB_PORT: "1433"
+  DB_NAME: "DB_SQL_PAIF_GAMES"
+
+  RabbitSettings__HostName: "rabbitmq"
+  RabbitSettings__Port: "5672"
+  RabbitSettings__VirtualHost: "/"
+  RabbitSettings__RetryInSeconds__0: "1"
+  RabbitSettings__RedeliveryInSeconds__0: "30"
+  RabbitSettings__RedeliveryInSeconds__1: "60"
+  RabbitSettings__RedeliveryInSeconds__2: "90"

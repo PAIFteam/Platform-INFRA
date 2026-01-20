@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: users-config
+  namespace: paif
+data:
+  RabbitSettings__QueueName: "welcome_customer_queue"
+  RabbitSettings__StartConsumer: "true"

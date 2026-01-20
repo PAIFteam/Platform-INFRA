@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payments-config
+  namespace: paif
+data:
+  RabbitSettings__QueueName: "payment_processed_event_queue"
+  RabbitSettings__QueueNameMessage: "payment_message_event_queue"
+  RabbitSettings__QueueNameConsumer: "order_placed_event_queue"
+  RabbitSettings__StartConsumer: "true"

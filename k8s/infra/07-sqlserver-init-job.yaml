@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sqlserver-init
+  namespace: paif
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: sql-init
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          env:
+            - name: DB_HOST
+              valueFrom: { configMapKeyRef: { name: paif-shared-config, key: DB_HOST } }
+            - name: SA_PASSWORD
+              valueFrom: { secretKeyRef: { name: paif-shared-secrets, key: SA_PASSWORD } }
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+          command: ["bash","-lc"]
+          args:
+            - |
+              set -e
+              echo "Aguardando SQL Server..."
+              for i in {1..60}; do
+                /opt/mssql-tools18/bin/sqlcmd -S ${DB_HOST} -U sa -P "${SA_PASSWORD}" -Q "SELECT 1" -C && break
+                sleep 2
+              done
+              /opt/mssql-tools18/bin/sqlcmd -S ${DB_HOST} -U sa -P "${SA_PASSWORD}" -i /scripts/01-schema.sql -C
+              /opt/mssql-tools18/bin/sqlcmd -S ${DB_HOST} -U sa -P "${SA_PASSWORD}" -i /scripts/02-tables.sql -C
+              /opt/mssql-tools18/bin/sqlcmd -S ${DB_HOST} -U sa -P "${SA_PASSWORD}" -i /scripts/03-seed.sql -C
+              echo "Scripts executados com sucesso!"
+      volumes:
+        - name: scripts
+          configMap:
+            name: sql-init-scripts

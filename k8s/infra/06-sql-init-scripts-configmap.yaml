@@ -1,0 +1,237 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sql-init-scripts
+  namespace: paif
+data:
+  01-schema.sql: |
+    IF DB_ID('DB_SQL_PAIF_GAMES') IS NULL
+    BEGIN
+      CREATE DATABASE [DB_SQL_PAIF_GAMES];
+    END
+  02-tables.sql: |
+    USE [DB_SQL_PAIF_GAMES]
+    CREATE USER [USR_SQL_PAIF_GAMES] FOR LOGIN [USR_SQL_PAIF_GAMES] WITH DEFAULT_SCHEMA=[dbo]
+    ALTER ROLE [db_owner] ADD MEMBER [USR_SQL_PAIF_GAMES]
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    CREATE TABLE [dbo].[access_control](
+    	[id_profile] [int] NOT NULL,
+    	[id_function] [int] NOT NULL,
+     CONSTRAINT [PK_access_control_1] PRIMARY KEY CLUSTERED 
+    (
+    	[id_profile] ASC,
+    	[id_function] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    SET ANSI_PADDING ON
+    CREATE TABLE [dbo].[access_function](
+    	[id_function] [int] NOT NULL,
+    	[name] [varchar](50) NOT NULL,
+    	[code] [varchar](15) NOT NULL,
+     CONSTRAINT [PK_acess_function] PRIMARY KEY CLUSTERED 
+    (
+    	[id_function] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_PADDING OFF
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    SET ANSI_PADDING ON
+    CREATE TABLE [dbo].[access_profile](
+    	[id_profile] [int] NOT NULL,
+    	[name] [varchar](50) NOT NULL,
+     CONSTRAINT [PK_profile] PRIMARY KEY CLUSTERED 
+    (
+    	[id_profile] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_PADDING OFF
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    SET ANSI_PADDING ON
+    CREATE TABLE [dbo].[access_users](
+    	[id_user] [int] IDENTITY(1,1) NOT NULL,
+    	[name] [varchar](150) NOT NULL,
+    	[login] [varchar](30) NOT NULL,
+    	[password] [varchar](15) NOT NULL,
+    	[email] [varchar](150) NOT NULL,
+    	[date_birth] [datetime] NOT NULL,
+    	[id_profile] [int] NOT NULL,
+     CONSTRAINT [PK_users] PRIMARY KEY CLUSTERED 
+    (
+    	[id_user] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_PADDING OFF
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    SET ANSI_PADDING ON
+    CREATE TABLE [dbo].[company](
+    	[id_company] [int] NOT NULL,
+    	[name] [varchar](150) NOT NULL,
+     CONSTRAINT [PK_company] PRIMARY KEY CLUSTERED 
+    (
+    	[id_company] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_PADDING OFF
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    SET ANSI_PADDING ON
+    CREATE TABLE [dbo].[games](
+    	[id_game] [int] NOT NULL,
+    	[name] [varchar](150) NOT NULL,
+    	[id_company] [int] NOT NULL,
+    	[id_type_game] [int] NOT NULL,
+    	[price] [decimal](18, 0) NOT NULL,
+     CONSTRAINT [PK_games] PRIMARY KEY CLUSTERED 
+    (
+    	[id_game] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_PADDING OFF
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    SET ANSI_PADDING ON
+    CREATE TABLE [dbo].[promotion](
+    	[id_promotion] [int] NOT NULL,
+    	[name] [varchar](150) NOT NULL,
+    	[discount] [decimal](18, 2) NOT NULL,
+    	[date_start] [date] NOT NULL,
+    	[date_end] [date] NOT NULL,
+     CONSTRAINT [PK_promotion] PRIMARY KEY CLUSTERED 
+    (
+    	[id_promotion] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_PADDING OFF
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    CREATE TABLE [dbo].[sale](
+    	[id_sale] [int] NOT NULL,
+    	[date_sale] [date] NOT NULL,
+    	[id_user] [int] NOT NULL,
+    	[price_total] [decimal](18, 2) NOT NULL,
+     CONSTRAINT [PK_sale] PRIMARY KEY CLUSTERED 
+    (
+    	[id_sale] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    CREATE TABLE [dbo].[sale_item](
+    	[id_sale_item] [int] NOT NULL,
+    	[id_sale] [int] NOT NULL,
+    	[id_game] [int] NOT NULL,
+    	[id_promotion] [int] NOT NULL,
+    	[price] [decimal](18, 2) NOT NULL,
+     CONSTRAINT [PK_sale_item] PRIMARY KEY CLUSTERED 
+    (
+    	[id_sale_item] ASC,
+    	[id_sale] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_NULLS ON
+    SET QUOTED_IDENTIFIER ON
+    SET ANSI_PADDING ON
+    CREATE TABLE [dbo].[type_game](
+    	[id_type_game] [int] NOT NULL,
+    	[name] [varchar](150) NOT NULL,
+     CONSTRAINT [PK_type_game] PRIMARY KEY CLUSTERED 
+    (
+    	[id_type_game] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+    ) ON [PRIMARY]
+    
+    SET ANSI_PADDING OFF
+    ALTER TABLE [dbo].[access_control]  WITH CHECK ADD  CONSTRAINT [FK_access_control_access_function] FOREIGN KEY([id_function])
+    REFERENCES [dbo].[access_function] ([id_function])
+    ALTER TABLE [dbo].[access_control] CHECK CONSTRAINT [FK_access_control_access_function]
+    ALTER TABLE [dbo].[access_control]  WITH CHECK ADD  CONSTRAINT [FK_access_control_access_profile] FOREIGN KEY([id_profile])
+    REFERENCES [dbo].[access_profile] ([id_profile])
+    ALTER TABLE [dbo].[access_control] CHECK CONSTRAINT [FK_access_control_access_profile]
+    ALTER TABLE [dbo].[access_users]  WITH CHECK ADD  CONSTRAINT [FK_access_users_access_profile] FOREIGN KEY([id_profile])
+    REFERENCES [dbo].[access_profile] ([id_profile])
+    ALTER TABLE [dbo].[access_users] CHECK CONSTRAINT [FK_access_users_access_profile]
+    ALTER TABLE [dbo].[games]  WITH CHECK ADD  CONSTRAINT [FK_games_company] FOREIGN KEY([id_company])
+    REFERENCES [dbo].[company] ([id_company])
+    ALTER TABLE [dbo].[games] CHECK CONSTRAINT [FK_games_company]
+    ALTER TABLE [dbo].[games]  WITH CHECK ADD  CONSTRAINT [FK_games_type_game] FOREIGN KEY([id_type_game])
+    REFERENCES [dbo].[type_game] ([id_type_game])
+    ALTER TABLE [dbo].[games] CHECK CONSTRAINT [FK_games_type_game]
+    ALTER TABLE [dbo].[sale]  WITH CHECK ADD  CONSTRAINT [FK_sale_access_users] FOREIGN KEY([id_user])
+    REFERENCES [dbo].[access_users] ([id_user])
+    ALTER TABLE [dbo].[sale] CHECK CONSTRAINT [FK_sale_access_users]
+    ALTER TABLE [dbo].[sale_item]  WITH CHECK ADD  CONSTRAINT [FK_sale_item_games] FOREIGN KEY([id_game])
+    REFERENCES [dbo].[games] ([id_game])
+    ALTER TABLE [dbo].[sale_item] CHECK CONSTRAINT [FK_sale_item_games]
+    ALTER TABLE [dbo].[sale_item]  WITH CHECK ADD  CONSTRAINT [FK_sale_item_promotion] FOREIGN KEY([id_promotion])
+    REFERENCES [dbo].[promotion] ([id_promotion])
+    ALTER TABLE [dbo].[sale_item] CHECK CONSTRAINT [FK_sale_item_promotion]
+    ALTER TABLE [dbo].[sale_item]  WITH CHECK ADD  CONSTRAINT [FK_sale_item_sale] FOREIGN KEY([id_sale])
+    REFERENCES [dbo].[sale] ([id_sale])
+    ALTER TABLE [dbo].[sale_item] CHECK CONSTRAINT [FK_sale_item_sale]
+
+  03-seed.sql: |
+    USE [DB_SQL_PAIF_GAMES]
+    delete from access_users
+    delete from access_control
+    delete from access_function
+    delete from access_profile
+    
+    INSERT INTO dbo.access_profile (id_profile, name) VALUES (1, 'Administrador')
+    INSERT INTO dbo.access_profile (id_profile, name) VALUES (2, 'Cliente')
+    
+    INSERT INTO dbo.access_function (id_function,name, code) VALUES (1, 'Incluir Usuário','CON-USU')
+    INSERT INTO dbo.access_function (id_function,name, code) VALUES (2, 'Listar Usuários','LIS-USU')
+    INSERT INTO dbo.access_function (id_function,name, code) VALUES (3, 'Alterar Usuário','ALT-USU')
+    INSERT INTO dbo.access_function (id_function,name, code) VALUES (4, 'Acessar Plataforma','ACE-PLA')
+    INSERT INTO dbo.access_function (id_function,name, code) VALUES (5, 'Acessar Biblioteca de Jogos','ACE-BIB-JOG')
+    INSERT INTO dbo.access_function (id_function,name, code) VALUES (6, 'Incluir/Alterar Jogos','INC-ALT-JOG')
+    INSERT INTO dbo.access_function (id_function,name, code) VALUES (7, 'Incluir/Alterar Promoção','INC-ALT-PRO')
+    
+    INSERT INTO dbo.access_control VALUES (1,1)
+    INSERT INTO dbo.access_control VALUES (1,2)
+    INSERT INTO dbo.access_control VALUES (1,3)
+    INSERT INTO dbo.access_control VALUES (1,4)
+    INSERT INTO dbo.access_control VALUES (1,5)
+    INSERT INTO dbo.access_control VALUES (1,6)
+    INSERT INTO dbo.access_control VALUES (1,7)
+    INSERT INTO dbo.access_control VALUES (2,4)
+    INSERT INTO dbo.access_control VALUES (2,5)
+    
+    INSERT INTO dbo.access_users (name, [login], [password], email, date_birth, id_profile) values ('CHARLES TOSTES', 'crtostes77', 'Paif@!01','crtostes77@gmail.com', '1977-01-06' ,1)
+    
+    
+    SELECT * FROM dbo.access_users u
+    	INNER JOIN dbo.access_profile p		ON u.id_profile = p.id_profile
+    	INNER JOIN dbo.access_control ac	ON p.id_profile = ac.id_profile
+    	INNER JOIN dbo.access_function f	ON ac.id_function = f.id_function
+    WHERE u.login = 'crtostes77'
+    
+    INSERT INTO [dbo].[type_game] VALUES (1,'Ação')
+    INSERT INTO [dbo].[type_game] VALUES (2,'RPG(Role-Playng_Game')
+    INSERT INTO [dbo].[type_game] VALUES (3,'Estratégia')
+    INSERT INTO [dbo].[type_game] VALUES (4,'Simulação')
+    INSERT INTO [dbo].[type_game] VALUES (5,'Aventura')
+    INSERT INTO [dbo].[type_game] VALUES (6,'Esportes ou Fantasia')
+    INSERT INTO [dbo].[type_game] VALUES (7,'Battle Royale')
+    
+    INSERT INTO [dbo].[promotion] ([id_promotion],[name],[discount],[date_start],[date_end]) VALUES (1,'Inauguração',10,'2026-01-01','2026-03-30')
+    INSERT INTO [dbo].[company] ([id_company],[name]) VALUES (1,'Atari')
+    INSERT INTO [dbo].[games] ([id_game],[name], id_company, id_type_game, price) VALUES (1,'River Raid',1,1,50.89)
+    INSERT INTO [dbo].[games] ([id_game],[name], id_company, id_type_game, price) VALUES (2,'Enduro',1,1,75.99)
+    INSERT INTO [dbo].[games] ([id_game],[name], id_company, id_type_game, price) VALUES (3,'Pole Position',1,1,85.99)
+    INSERT INTO [dbo].[games] ([id_game],[name], id_company, id_type_game, price) VALUES (4,'Pac-Man',1,1,24.89)

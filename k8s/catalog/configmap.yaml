@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-config
+  namespace: paif
+data:
+  RabbitSettings__QueueName: "order_placed_event_queue"
+  RabbitSettings__QueueNameConsumer: "payment_processed_event_queue"
+  RabbitSettings__StartConsumer: "true"

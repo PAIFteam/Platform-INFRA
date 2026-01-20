@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notifications-config
+  namespace: paif
+data:
+  RabbitSettings__QueueName: "welcome_customer_queue"
+  RabbitSettings__QueueNamePaymentProcessedEvent: "payment_message_event_queue"
+  RabbitSettings__StartConsumer: "true"
