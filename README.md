@@ -1,11 +1,11 @@
-##📦 PAIF – Repositório de Infraestrutura (Infra)
+## 📦 PAIF – Repositório de Infraestrutura (Infra)
 
 Este repositório representa o quinto repositório do projeto PAIF, sendo responsável por toda a infraestrutura local do sistema, incluindo Docker, Docker Compose e Kubernetes (Docker Desktop).
 
 O objetivo deste repositório é permitir a execução completa do sistema tanto via Docker Compose quanto via Kubernetes, garantindo portabilidade, padronização e facilidade de avaliação.
 
-#🐳 Docker
-##📂 Pasta docker/
+# 🐳 Docker
+## 📂 Pasta docker/
 
 Contém os Dockerfiles individuais de cada microserviço:
 
@@ -16,8 +16,8 @@ Contém os Dockerfiles individuais de cada microserviço:
 
 Essas imagens são utilizadas tanto pelo Docker Compose quanto pelo Kubernetes.
 
-#🧩 Docker Compose
-##📄 docker-compose.yml
+# 🧩 Docker Compose
+## 📄 docker-compose.yml
 
 Responsável por subir todo o ambiente local via Docker, incluindo:
 
@@ -25,26 +25,26 @@ Responsável por subir todo o ambiente local via Docker, incluindo:
 - SQL Server
 - RabbitMQ (com Management UI)
 
-##📄 .env
+## 📄 .env
 Arquivo contendo variáveis sensíveis (SECRETS) como:
 
 - Senhas
 - Connection Strings
 - Credenciais do RabbitMQ
 
-##⚠️ Importante:
+## ⚠️ Importante:
 Este arquivo será versionado exclusivamente para fins de verificação acadêmica.
 Em um cenário real de produção, este arquivo não deveria ser commitado.
 
-#▶️ Script de inicialização com Docker Compose
+# ▶️ Script de inicialização com Docker Compose
 start-compose.bat (Windows)
 
-##📌 Pré-requisitos:
+## 📌 Pré-requisitos:
 
 Docker Desktop instalado
 Docker Desktop em execução
  - Não é necessário Kubernetes para este modo de execução.
-##📌 O que esse script faz
+## 📌 O que esse script faz
 
 Remove containers, volumes e imagens locais
 Reconstrói todas as imagens Docker do projeto
@@ -54,16 +54,16 @@ SQL Server
 RabbitMQ
 Executa o ambiente em segundo plano (detached mode)
 
-#▶️ Script de inicialização com Kubernetes
+# ▶️ Script de inicialização com Kubernetes
 deploy-local.sh
-##📌 Pré-requisitos:
+## 📌 Pré-requisitos:
 
 Docker Desktop instalado
 Kubernetes habilitado no Docker Desktop
 Settings → Kubernetes → Enable Kubernetes
 kubectl disponível no PATH
 
-##📌 O que esse script faz
+## 📌 O que esse script faz
 
 Builda todas as imagens Docker locais que serão utilizadas pelo Kubernetes
 Aplica os manifestos Kubernetes organizados por responsabilidade:
@@ -73,8 +73,8 @@ Cria um port-forward temporário para o SQL Server, permitindo:
 Conexão externa via DBeaver / SSMS
 Análise e validação do banco de dados
 
-#☸️ Kubernetes (Docker Desktop)
-##📂 Pasta k8s/
+# ☸️ Kubernetes (Docker Desktop)
+## 📂 Pasta k8s/
 
 Contém todos os manifestos Kubernetes, organizados por responsabilidade:
 
@@ -93,7 +93,7 @@ Deployment
 Service (ClusterIP + NodePort)
 ConfigMaps específicos do microserviço
 
-##📌 Regras atendidas:
+## 📌 Regras atendidas:
 - Uso obrigatório de Deployments
 - Uso de Services
 - Uso de ConfigMaps para dados não sensíveis
