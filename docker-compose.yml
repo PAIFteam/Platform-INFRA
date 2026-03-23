@@ -72,82 +72,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 20
-      
-  x-api-common-env: &api-common-env
-  ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
-  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: "false"
-  LANG: "C.UTF-8"
-  LC_ALL: "C.UTF-8"
-  ConnectionStrings__DB_SQL_PAIF_GAMES: "Server=${DB_HOST},${DB_PORT};Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
-  RabbitSettings__HostName: "${RABBIT_HOST}"
-  RabbitSettings__Port: "${RABBIT_PORT}"
-  RabbitSettings__Username: "${RABBIT_USER}"
-  RabbitSettings__Password: "${RABBIT_PASS}"
-  RabbitSettings__VirtualHost: "${RABBIT_VHOST}"
-  RabbitSettings__RetryInSeconds: "${RABBIT_RETRY_SECONDS}"
 
-x-api-common: &api-common
-  depends_on:
-    rabbitmq:
-      condition: service_healthy
-    sqlserver:
-      condition: service_healthy
-  environment:
-    <<: *api-common-env
-
-services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "${SA_PASSWORD}"
-      MSSQL_PID: "Developer"
-    ports:
-      - "${DB_PORT}:1433"
-    volumes:
-      - sqlserver-data:/var/opt/mssql
-    healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-C", "-S", "localhost", "-U", "sa", "-P", "${SA_PASSWORD}", "-Q", "SELECT 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
-
-  sqlserver-init:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver-init
-    depends_on:
-      sqlserver:
-        condition: service_healthy
-    volumes:
-      - ./docker/db/init:/scripts:ro
-    restart: "no"
-    entrypoint:
-      - bash
-      - -lc
-      - |
-        set -e
-        /opt/mssql-tools18/bin/sqlcmd -S ${DB_HOST} -U sa -P "${SA_PASSWORD}" -i /scripts/01-schema.sql -C
-        /opt/mssql-tools18/bin/sqlcmd -S ${DB_HOST} -U sa -P "${SA_PASSWORD}" -i /scripts/02-tables.sql -C
-        /opt/mssql-tools18/bin/sqlcmd -S ${DB_HOST} -U sa -P "${SA_PASSWORD}" -i /scripts/03-seed.sql -C
-        echo "Scripts executados com sucesso!"
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: "${RABBIT_USER}"
-      RABBITMQ_DEFAULT_PASS: "${RABBIT_PASS}"
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
-      interval: 10s
-      timeout: 5s
-      retries: 20
-      
   users-api:
     <<: *api-common
     container_name: users-api
@@ -195,6 +120,6 @@ services:
       RabbitSettings__StartConsumer: "true"
     ports:
       - "5004:8080"
-      
+
 volumes:
   sqlserver-data:
