@@ -11,7 +11,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /games(/|$)(.*)
+          - path: /catalog(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
