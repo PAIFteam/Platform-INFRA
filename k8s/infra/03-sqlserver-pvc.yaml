@@ -2,11 +2,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: sqlserver-data
-  namespace: paif
+  namespace: paifgames-ns
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: managed-csi
   resources:
     requests:
-      storage: 5Gi
-  storageClassName: hostpath
+      storage: 20Gi
