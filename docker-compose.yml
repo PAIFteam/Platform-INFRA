@@ -30,8 +30,6 @@ services:
       MSSQL_PID: "Developer"
     ports:
       - "${DB_PORT}:1433"
-    volumes:
-      - sqlserver-data:/var/opt/mssql
     healthcheck:
       test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-C", "-S", "localhost", "-U", "sa", "-P", "${SA_PASSWORD}", "-Q", "SELECT 1"]
       interval: 10s
