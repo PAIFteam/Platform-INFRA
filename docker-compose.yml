@@ -74,7 +74,7 @@ services:
   users-api:
     <<: *api-common
     container_name: users-api
-    image: acrpaifgamesdev.azurecr.io/usersapi:${IMAGE_TAG}
+    image: acrpaifgamesdev.azurecr.io/users-api:${IMAGE_TAG}
     environment:
       <<: *api-common-env
       RabbitSettings__QueueName: "${USERS_QUEUE_NAME}"
