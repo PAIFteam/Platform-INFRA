@@ -74,7 +74,7 @@ services:
   users-api:
     <<: *api-common
     container_name: users-api
-    image: acrpaifgames.azurecr.io/usersapi:${IMAGE_TAG}
+    image: acrpaifgamesdev.azurecr.io/usersapi:${IMAGE_TAG}
     environment:
       <<: *api-common-env
       RabbitSettings__QueueName: "${USERS_QUEUE_NAME}"
@@ -85,7 +85,7 @@ services:
   payments-api:
     <<: *api-common
     container_name: payments-api
-    image: acrpaifgames.azurecr.io/payments-api:${IMAGE_TAG}
+    image: acrpaifgamesdev.azurecr.io/payments-api:${IMAGE_TAG}
     environment:
       <<: *api-common-env
       RabbitSettings__QueueName: "${PAYMENTS_QUEUE_NAME}"
@@ -98,7 +98,7 @@ services:
   notifications-api:
     <<: *api-common
     container_name: notifications-api
-    image: acrpaifgames.azurecr.io/notifications-api:${IMAGE_TAG}
+    image: acrpaifgamesdev.azurecr.io/notifications-api:${IMAGE_TAG}
     environment:
       <<: *api-common-env
       RabbitSettings__QueueName: "${NOTIFICATIONS_QUEUE_NAME}"
@@ -110,7 +110,7 @@ services:
   catalog-api:
     <<: *api-common
     container_name: catalog-api
-    image: acrpaifgames.azurecr.io/catalog-api:${IMAGE_TAG}
+    image: acrpaifgamesdev.azurecr.io/catalog-api:${IMAGE_TAG}
     environment:
       <<: *api-common-env
       RabbitSettings__QueueName: "${CATALOG_QUEUE_NAME}"
