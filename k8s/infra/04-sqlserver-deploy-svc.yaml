@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sqlserver
-  namespace: paifgames-ns
+  namespace: paif
   labels:
     io.kompose.service: sqlserver
 spec:
