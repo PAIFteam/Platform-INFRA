@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: sqlserver-init
-  namespace: paif
+  namespace: paifgames-ns
 spec:
   backoffLimit: 2
   template:
