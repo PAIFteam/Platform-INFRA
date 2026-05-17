@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: paif-shared-config
-  namespace: paif
+  namespace: paifgames-ns
 data:
   ASPNETCORE_ENVIRONMENT: "Development"
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: "false"
